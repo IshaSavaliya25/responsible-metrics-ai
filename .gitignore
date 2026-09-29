@@ -1,0 +1,92 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+# Virtual Environments
+**/venv/
+**/.venv/
+**/env/
+**/ENV/
+**/env.bak/
+**/venv.bak/
+ENV/
+
+# Environment variables & secrets
+.env
+.env.*
+!.env.example
+
+# SQLite & Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploaded files and cached data
+uploads/
+**/uploads/*
+!**/uploads/.gitkeep
+data/cache/
+*.pdf
+
+# Git backup folders
+.git_backup/
+.git_old/
+
+# Logs
+*.log
+logs/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+
+# Operating System files
+.DS_Store
+Thumbs.db
+desktop.ini

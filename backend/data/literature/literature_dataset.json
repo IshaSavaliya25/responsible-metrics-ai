@@ -1,0 +1,182 @@
+[
+  {
+    "id": "openalex:W2165681604",
+    "title": "The Leiden Manifesto for research metrics",
+    "abstract": "Data are increasingly used to govern science. Research evaluations that were once bespoke and conducted by peers are now routinely aided by metrics. The problem is that evaluation is now led by the data rather than by judgment. Metrics have proliferated: usually well intentioned, not always well informed, often ill applied. We present ten principles to guide research evaluation, emphasizing that quantitative evaluation should support qualitative, expert assessment and protect local research excellence.",
+    "keywords": ["responsible metrics", "leiden manifesto", "research assessment", "bibliometric indicators", "peer review", "citation analysis", "contextual evaluation"],
+    "year": 2015,
+    "venue": "Nature",
+    "doi": "10.1038/520429a"
+  },
+  {
+    "id": "openalex:W2143491325",
+    "title": "San Francisco Declaration on Research Assessment: Putting science into the assessment of research",
+    "abstract": "The San Francisco Declaration on Research Assessment (DORA) recognizes the need to improve the ways in which the outputs of scholarly research are evaluated. It recommends eliminating the use of journal-based metrics, such as Journal Impact Factors, in funding, appointment, and promotion decisions, assessing research on its own merits rather than on the basis of the journal in which it is published, and capitalizing on the opportunities provided by online publication.",
+    "keywords": ["dora", "journal impact factor", "responsible assessment", "research evaluation", "individual researcher", "scientific integrity", "fairness"],
+    "year": 2012,
+    "venue": "DORA Steering Committee",
+    "doi": "10.1126/science.1241193"
+  },
+  {
+    "id": "openalex:W2258908849",
+    "title": "A review of the use and misuse of citation indicators in research evaluation",
+    "abstract": "Citation indicators are widely used in research evaluation, but their appropriate use requires a deep understanding of their properties and limitations. This paper provides a comprehensive review of citation indicators, covering direct citation counts, h-index, field normalization, and fractional counting. We analyze common pitfalls, including unadjusted cross-disciplinary comparisons, metric gaming, and the neglect of qualitative peer review in assessing individual researchers.",
+    "keywords": ["citation indicators", "field normalization", "h-index", "metric misuse", "bibliometric evaluation", "research policy", "scientometrics"],
+    "year": 2016,
+    "venue": "Journal of Informetrics",
+    "doi": "10.1016/j.joi.2016.02.007"
+  },
+  {
+    "id": "openalex:W2955523730",
+    "title": "The Hong Kong Principles for assessing researchers: Fostering research integrity",
+    "abstract": "Research assessment criteria often reward quantity over quality and rigor, which may inadvertently incentivize poor research practices. The Hong Kong Principles provide a framework to reward responsible research practices, open science, replication studies, transparent reporting, and peer review contributions to foster a research culture based on integrity.",
+    "keywords": ["research integrity", "open science", "hong kong principles", "responsible evaluation", "transparency", "peer review", "replication"],
+    "year": 2020,
+    "venue": "PLOS Biology",
+    "doi": "10.1371/journal.pbio.3000737"
+  },
+  {
+    "id": "openalex:W2560377488",
+    "title": "Assessing research impact: Moving beyond citations and the h-index",
+    "abstract": "Bibliometric indicators such as citation counts and the h-index have become standard tools for evaluating researchers. However, reliance on single metrics introduces severe biases against early-career researchers, interdisciplinary scholarship, and non-traditional scholarly outputs. We argue for a multidimensional, contextualized evaluation portfolio integrating qualitative peer evidence.",
+    "keywords": ["h-index", "citation counts", "multidimensional evaluation", "early career", "peer review", "research impact", "contextual evaluation"],
+    "year": 2017,
+    "venue": "Scientometrics",
+    "doi": "10.1007/s11192-017-2481-8"
+  },
+  {
+    "id": "openalex:W2995574581",
+    "title": "OpenAlex: A fully-open index of scholarly works, authors, institutions, and concepts",
+    "abstract": "OpenAlex is a free, openly accessible scholarly graph containing hundreds of millions of interconnected research entities including scientific works, authors, institutions, and topics. Designed as an open replacement for proprietary bibliographic databases like Web of Science and Scopus, OpenAlex empowers researchers to audit citations and build transparent, reproducible research evaluation tools.",
+    "keywords": ["openalex", "open data", "scholarly graph", "bibliometrics", "transparency", "reproducibility", "citation database"],
+    "year": 2022,
+    "venue": "ArXiv:2205.01833",
+    "doi": "10.48550/arXiv.2205.01833"
+  },
+  {
+    "id": "openalex:W2066551842",
+    "title": "Field-normalized citation indicators: Normalization methods and validation across disciplines",
+    "abstract": "Comparing raw citation numbers across different scientific disciplines produces misleading results because citation frequencies vary by orders of magnitude between fields. This study presents and validates advanced field-normalization approaches, including source-normalized and target-normalized indicators, providing standards for fair institutional comparison.",
+    "keywords": ["field normalization", "citation indicators", "disciplinary context", "institutional comparison", "scientometrics", "cross-field analysis"],
+    "year": 2013,
+    "venue": "Journal of the American Society for Information Science and Technology",
+    "doi": "10.1002/asi.22850"
+  },
+  {
+    "id": "openalex:W2945892341",
+    "title": "Citation gaming, cartels, and strategic manipulation of bibliometric indicators",
+    "abstract": "When indicators become targets for evaluation, they cease to be good metrics. This paper investigates gaming behavior in academic publishing, including coercive citations, citation cartels, and deliberate metric manipulation. We demonstrate how multi-level auditing frameworks can detect anomalous citation clustering and protect research integrity.",
+    "keywords": ["citation gaming", "metric gaming", "citation cartels", "goodhart law", "research integrity", "governance", "limitations"],
+    "year": 2019,
+    "venue": "Nature Human Behaviour",
+    "doi": "10.1038/s41562-019-0638-4"
+  },
+  {
+    "id": "openalex:W2164402923",
+    "title": "Altmetrics: Value, diversity, and limitations of alternative web-based metrics",
+    "abstract": "Altmetrics track the attention research receives online, including downloads, social media mentions, blog posts, and policy document citations. While altmetrics provide rapid feedback and capture non-academic societal impact, they must not replace peer review or traditional indicators. We discuss their responsible combination in research evaluation.",
+    "keywords": ["altmetrics", "alternative metrics", "societal impact", "metric diversity", "qualitative evidence", "research evaluation"],
+    "year": 2015,
+    "venue": "Research Evaluation",
+    "doi": "10.1093/reseval/rvv012"
+  },
+  {
+    "id": "openalex:W3037920193",
+    "title": "KeyBERT: Minimal keyword extraction with contextual pre-trained language models",
+    "abstract": "KeyBERT is a minimal and easy-to-use keyword extraction technique that leverages BERT-style contextual embeddings to create keywords and keyphrases that are most similar to a document. By computing cosine similarity between candidate sub-phrases and the global document representation, KeyBERT achieves state-of-the-art keyphrase relevance without manual supervision.",
+    "keywords": ["keybert", "keyword extraction", "bert", "natural language processing", "embeddings", "information extraction", "semantic similarity"],
+    "year": 2020,
+    "venue": "Zenodo",
+    "doi": "10.5281/zenodo.4430120"
+  },
+  {
+    "id": "openalex:W2971234850",
+    "title": "Sentence-BERT: Sentence embeddings using Siamese BERT-networks",
+    "abstract": "BERT and RoBERTa have set new state-of-the-art performance on sentence-pair regression tasks like semantic textual similarity. However, comparing two sentences requires feeding both into the network, causing massive computational overhead. We present Sentence-BERT (SBERT), a modification of the pre-trained BERT network that uses siamese and triplet network structures to derive semantically meaningful sentence embeddings that can be compared using cosine similarity.",
+    "keywords": ["sentence-bert", "sbert", "sentence embeddings", "cosine similarity", "semantic similarity", "nlp", "transformers"],
+    "year": 2019,
+    "venue": "EMNLP 2019",
+    "doi": "10.18653/v1/D19-1410"
+  },
+  {
+    "id": "openalex:W2972982834",
+    "title": "SciBERT: A pretrained language model for scientific text",
+    "abstract": "Obtaining pre-trained models on scientific text is essential for scientific NLP tasks such as information extraction, citation intent classification, and research gap detection. SciBERT is a pre-trained language model based on BERT trained on a large corpus of scientific publications from biomedical and computer science domains, showing substantial improvements over standard BERT on scientific benchmarks.",
+    "keywords": ["scibert", "scientific text", "information extraction", "academic papers", "nlp", "bert", "citation classification"],
+    "year": 2019,
+    "venue": "EMNLP 2019",
+    "doi": "10.18653/v1/D19-1371"
+  },
+  {
+    "id": "openalex:W3011827492",
+    "title": "Federated Learning: Challenges, methods, and future directions",
+    "abstract": "Federated learning involves training statistical models over decentralized devices holding local data samples without exchanging them. This survey discusses privacy guarantees, communication-efficient distributed optimization, system and statistical heterogeneity across clients, and multi-modal decoupled federated learning architectures.",
+    "keywords": ["federated learning", "decentralized data", "privacy", "heterogeneity", "distributed optimization", "machine learning", "neural networks"],
+    "year": 2020,
+    "venue": "IEEE Signal Processing Magazine",
+    "doi": "10.1109/MSP.2020.2975749"
+  },
+  {
+    "id": "openalex:W2582849201",
+    "title": "Communication-efficient learning of deep networks from decentralized data",
+    "abstract": "Modern mobile devices have access to a wealth of data suitable for learning models. However, this data is often privacy-sensitive. We introduce FederatedAveraging (FedAvg), an algorithm that decouples model training from direct raw data access by aggregating locally computed gradient updates on central servers.",
+    "keywords": ["federated learning", "fedavg", "decentralized learning", "privacy-preserving", "optimization", "deep learning"],
+    "year": 2017,
+    "venue": "AISTATS 2017",
+    "doi": "10.48550/arXiv.1602.05629"
+  },
+  {
+    "id": "openalex:W3128945721",
+    "title": "Modality-decoupled and heterogeneous representations in distributed collaborative learning",
+    "abstract": "Real-world collaborative learning systems often suffer from severe modality discrepancies and client-level data heterogeneity. This paper investigates modality-decoupled collaborative frameworks that enable clients with missing or heterogeneous sensory modalities to exchange representations efficiently without degrading global convergence.",
+    "keywords": ["modality-decoupled", "federated learning", "heterogeneity", "collaborative learning", "multimodal", "distributed systems"],
+    "year": 2022,
+    "venue": "IEEE Transactions on Neural Networks and Learning Systems",
+    "doi": "10.1109/TNNLS.2022.3184920"
+  },
+  {
+    "id": "openalex:W3149827394",
+    "title": "Visuotactile world models for robotic manipulation and state estimation",
+    "abstract": "Robust physical interaction in robotics requires understanding both visual scenes and tactile contact feedback. We propose a compact visuotactile predictive world model that learns unified latent representations from multi-modal sensor streams to predict contact dynamics and plan robotic manipulation tasks under occlusion.",
+    "keywords": ["visuotactile", "world models", "robotic manipulation", "tactile sensing", "multimodal learning", "robotics", "state estimation"],
+    "year": 2021,
+    "venue": "IEEE Robotics and Automation Letters",
+    "doi": "10.1109/LRA.2021.3098234"
+  },
+  {
+    "id": "openalex:W2981923485",
+    "title": "The INORMS SCOPE framework for responsible research evaluation",
+    "abstract": "The International Network of Research Management Societies (INORMS) developed the SCOPE framework to guide universities and funding agencies in evaluating research responsibly: Start with values, Context consideration, Options exploration, Probe deeply, and Evaluate effectiveness.",
+    "keywords": ["inorms scope", "responsible metrics", "institutional evaluation", "research management", "framework", "governance", "values"],
+    "year": 2020,
+    "venue": "Research Evaluation",
+    "doi": "10.1093/reseval/rvaa028"
+  },
+  {
+    "id": "openalex:W2798192843",
+    "title": "Responsible metrics in institutional rankings: Towards fair university comparisons",
+    "abstract": "Commercial global university rankings frequently violate responsible metrics principles by assigning arbitrary weights to composite indicators. This paper proposes a transparent, field-normalized benchmarking framework that discourages ranking gaming and emphasizes social impact and educational quality.",
+    "keywords": ["university rankings", "institutional comparison", "responsible metrics", "field normalization", "gaming", "governance"],
+    "year": 2018,
+    "venue": "Higher Education",
+    "doi": "10.1007/s10734-018-0284-y"
+  },
+  {
+    "id": "openalex:W2919284729",
+    "title": "Automated detection of research problem statements and methodology in scientific literature",
+    "abstract": "Understanding the structure of scholarly discourse is fundamental for automated literature synthesis. We develop an NLP pipeline using sequence labeling and sentence transformers to extract explicit research problem statements, methodology descriptions, and key findings from scientific PDF papers.",
+    "keywords": ["information extraction", "research problem", "methodology", "scientific papers", "nlp", "transformers", "key findings"],
+    "year": 2019,
+    "venue": "ACL 2019",
+    "doi": "10.18653/v1/P19-1284"
+  },
+  {
+    "id": "openalex:W3102938475",
+    "title": "Research gap detection using semantic networks and literature embedding graphs",
+    "abstract": "Identifying unexplored research gaps is critical for scientific breakthrough. We construct literature embedding graphs and compute concept density across thematic clusters, pinpointing underexplored scientific keywords and bridging disparate disciplinary silos.",
+    "keywords": ["research gap", "semantic networks", "literature graph", "novelty detection", "underexplored keywords", "scientometrics"],
+    "year": 2021,
+    "venue": "Scientometrics",
+    "doi": "10.1007/s11192-021-03948-2"
+  }
+]
