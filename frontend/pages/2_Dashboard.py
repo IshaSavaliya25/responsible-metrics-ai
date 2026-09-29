@@ -359,6 +359,13 @@ with col1:
         ]
 
 
+        novelty_color_map = {
+            "High": "#10b981",    # Emerald green
+            "Medium": "#f59e0b",  # Amber
+            "Low": "#3b82f6",     # Blue (direct follow-up)
+            "Unknown": "#6b7280"
+        }
+
         fig_novelty = px.pie(
 
             novelty_counts,
@@ -367,7 +374,13 @@ with col1:
 
             values="Count",
 
-            title="Research Novelty Levels"
+            color="Novelty Level",
+
+            color_discrete_map=novelty_color_map,
+
+            hole=0.4,
+
+            title="Research Novelty Distribution"
         )
 
 
@@ -512,8 +525,21 @@ st.dataframe(
     hide_index=True
 )
 
-# Row Action: View selected row in Analysis Report
-col_view_sel, col_view_btn = st.columns([3, 1])
+# Row Action: View selected row in Analysis Report & CSV Export
+col_csv_btn, col_view_sel, col_view_btn = st.columns([1.5, 2.5, 1.2])
+
+with col_csv_btn:
+    st.write("")
+    st.write("")
+    csv_data = recent_df.to_csv(index=False).encode("utf-8")
+    st.download_button(
+        label="📥 Export to CSV",
+        data=csv_data,
+        file_name="ResponsibleMetrics_Dashboard_Summary.csv",
+        mime="text/csv",
+        use_container_width=True
+    )
+
 with col_view_sel:
     dash_paper_options = {
         f"ID {p['id']} - {p.get('title') or p.get('filename')}": p["id"]
@@ -524,9 +550,10 @@ with col_view_sel:
         list(dash_paper_options.keys()),
         key="dash_select_row"
     )
+
 with col_view_btn:
     st.write("")
     st.write("")
-    if st.button("👁 View in Analysis Report", use_container_width=True):
+    if st.button("👁 View Report", use_container_width=True):
         st.session_state["selected_paper_id"] = dash_paper_options[selected_dash_label]
         st.switch_page("pages/4_Analysis_Report.py")

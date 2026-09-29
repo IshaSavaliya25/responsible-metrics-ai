@@ -72,6 +72,51 @@ The framework evaluates bibliometric usage across four distinct levels of schola
 5. **Real-Time Scholarly Graph Integration (`OpenAlexService`)**:
    * Automated paper title disambiguation using fuzzy token-sort matching against the OpenAlex API to pull live citation counts, authors, venues, and open-access metadata.
 
+### 📐 3.1 Mathematical Formulations & Score Derivations
+
+The framework derives four core quantitative indicators to ensure explainable and mathematically grounded evaluation:
+
+#### 1. Responsible Score ($S_{\text{resp}} \in [0, 100]$)
+Measures the contextual and ethical maturity of bibliometric indicator discourse across 6 weighted scientometric dimensions:
+$$S_{\text{resp}} = \min\left(100, \sum_{d=1}^{6} w_d \cdot D_d + B_{\text{biblio}}\right)$$
+* **Dimensions & Weights ($w_d$)**:
+  * **Contextual Evaluation ($w_1 = 20\%$)**: Context, tailored goals, appropriate usage scope.
+  * **Limitations Awareness ($w_2 = 20\%$)**: Explicit caution, biases, gaming risks, indicator boundaries.
+  * **Transparency & Openness ($w_3 = 15\%$)**: Open data, reproducible methodology, accessible records.
+  * **Metric Diversity ($w_4 = 15\%$)**: Multi-metric portfolios, avoiding single-indicator reliance.
+  * **Qualitative Evidence ($w_5 = 15\%$)**: Primacy of expert peer review, narrative portfolios.
+  * **Disciplinary Context ($w_6 = 15\%$)**: Field variation awareness, cross-disciplinary normalization.
+* **Bibliometric Bonus ($B_{\text{biblio}} \le 5$)**: OpenAlex verified metadata bonus (+2 citations, +1 pub year, +2 open access).
+
+#### 2. Principle Compliance Score ($S_{\text{comp}} \in [0, 100]$)
+Audits document compliance against the 10 Leiden Manifesto principles and DORA recommendations:
+$$S_{\text{comp}} = \max\left(0, \min\left(100, 50 + 7 \cdot |P| - \sum_{m \in M} \text{penalty}(m)\right)\right)$$
+* **Baseline Score**: Starts at a neutral baseline of 50.
+* **Responsible Practice Reward ($+7$ per practice $|P|$)**: Awarded for explicit mentions of peer review primacy, multi-indicator evaluation, open data, and field normalization.
+* **Misuse Deductions ($\text{penalty}(m)$)**:
+  * **High Severity ($-15$ pts)**: DORA violations (evaluating individuals using Journal Impact Factor), single-metric filtering, unnormalized cross-discipline comparisons.
+  * **Medium Severity ($-10$ pts)**: Arbitrary h-index thresholds, rigid ranking shortcuts.
+  * **Low Severity ($-5$ pts)**: False precision / reporting metrics to misleading decimal places.
+
+#### 3. Literature Similarity ($\text{Sim}_{\text{lit}}$)
+Quantifies semantic proximity to foundational scientometric benchmark literature using dense SBERT embeddings ($\vec{v} \in \mathbb{R}^{384}$):
+$$\text{Sim}(q, d_i) = \frac{\vec{v}_q \cdot \vec{v}_i}{\|\vec{v}_q\|_2 \|\vec{v}_i\|_2} \in [0.0, 1.0]$$
+* **Nearest Match ($\text{Sim}_{\text{nearest}}$)**: Maximum cosine similarity against any single benchmark work.
+* **Average Similarity ($\bar{S}$)**: Mean cosine similarity across the entire benchmark corpus ($N = 20$):
+$$\bar{S} = \frac{1}{N} \sum_{i=1}^N \text{Sim}(q, d_i)$$
+
+#### 4. Novelty Level & Novelty Index ($N_{\text{index}} \in [0\%, 100\%]$)
+Evaluates whether the paper is incremental, a novel synthesis, or pioneering frontier research:
+* **Prior Art Overlap**:
+$$\text{Overlap} = 0.60 \cdot \text{Sim}_{\text{nearest}} + 0.40 \cdot \text{Sim}_{\text{top3}}$$
+* **Composite Novelty Score**:
+$$N_{\text{score}} = 0.70 \cdot (1.0 - \text{Overlap}) + 0.30 \cdot (1.0 - \text{Sim}_{\text{cluster}})$$
+$$N_{\text{index}} = \text{round}(N_{\text{score}} \times 100, 1)$$
+* **Categorical Rating**:
+  * **High (Pioneering / Frontier)**: $N_{\text{index}} \ge 72.0\%$ (low prior art overlap)
+  * **Medium (Novel Synthesis / Extension)**: $42.0\% \le N_{\text{index}} < 72.0\%$ (moderate overlap, builds upon existing principles)
+  * **Low (Incremental Follow-up)**: $N_{\text{index}} < 42.0\%$ (high overlap with foundational prior art)
+
 ---
 
 ## 📂 4. Repository Structure
@@ -156,20 +201,11 @@ streamlit run app.py
 
 ---
 
-## 📊 6. Evaluation & Viva Defense Highlights
-
-When presenting this project for evaluation:
-
-1. **Explainable Auditing**: Rather than providing an opaque numerical score, the system provides sentence-level citations for every detected misuse and responsible practice.
-2. **Actionable Remediation**: For every flagged misuse (e.g. *MISUSE_JIF_INDIVIDUAL*), the engine provides specific academic remediation guidance (e.g. *“Adopt Field-Weighted Citation Impact (FWCI) and narrative peer portfolios”*).
-3. **Downloadable Audit Certificate**: Reviewers can download a formatted `.md` audit certificate directly from the **Analysis Report** page for inclusion in thesis appendices.
-
----
-
-## 📚 7. Foundational References
+## 📚 6. Foundational References
 
 * **Hicks, D., Wouters, P., Waltman, L., de Rijcke, S., & Rafols, I.** (2015). *Bibliometrics: The Leiden Manifesto for research metrics*. Nature, 520(7548), 429-431.
 * **San Francisco Declaration on Research Assessment (DORA)** (2012). *DORA: Putting science into the assessment of research*.
 * **Hirsch, J. E.** (2005). *An index to quantify an individual's scientific research output*. PNAS, 102(46), 16569-16572.
 * **Priem, J., Taraborelli, D., Groth, P., & Neylon, C.** (2010). *Altmetrics: A manifesto*.
 * **Wilsdon, J., et al.** (2015). *The Metric Tide: Report of the Independent Review of the Role of Metrics in Research Assessment and Management*. Higher Education Funding Council for England.
+

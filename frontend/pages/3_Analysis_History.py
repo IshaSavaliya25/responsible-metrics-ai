@@ -638,3 +638,14 @@ st.dataframe(
 
     hide_index=True
 )
+
+col_hist_csv, _ = st.columns([1.5, 3.5])
+with col_hist_csv:
+    csv_history = table_df.to_csv(index=False).encode("utf-8")
+    st.download_button(
+        label="📥 Export Table to CSV",
+        data=csv_history,
+        file_name="ResponsibleMetrics_Analysis_History.csv",
+        mime="text/csv",
+        use_container_width=True
+    )

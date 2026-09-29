@@ -107,8 +107,15 @@ class ResearchClusteringService:
             "year": target_paper.get("year", "Current")
         })
 
-        # Compute novelty indicator based on distance to nearest cluster center
-        novelty_score = round(min(1.0, target_dist_to_center), 3)
+        # Compute cluster cosine similarity and novelty score
+        center_vec = kmeans.cluster_centers_[target_cluster]
+        center_norm = float(np.linalg.norm(center_vec))
+        if center_norm > 0:
+            cluster_sim = float(np.dot(target_vector[0], center_vec / center_norm))
+        else:
+            cluster_sim = 0.0
+        cluster_sim = max(0.0, min(1.0, cluster_sim))
+        novelty_score = round(max(0.05, min(0.98, 1.0 - cluster_sim)), 3)
 
         return {
             "clusters": clusters_summary,
@@ -117,6 +124,7 @@ class ResearchClusteringService:
                 "y": target_y,
                 "cluster": target_cluster,
                 "distance_to_center": round(target_dist_to_center, 4),
+                "cluster_similarity": round(cluster_sim, 4),
                 "novelty_score": novelty_score
             },
             "scatter_points": scatter_points

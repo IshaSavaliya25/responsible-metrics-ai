@@ -1,9 +1,17 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from app.config import settings
 
-DATABASE_URL = "sqlite:///./responsible_metrics.db"
+
+DB_FILE = os.path.join(
+    settings.BASE_DIR,
+    "responsible_metrics.db"
+)
+
+DATABASE_URL = f"sqlite:///{DB_FILE.replace(os.sep, '/')}"
 
 
 engine = create_engine(

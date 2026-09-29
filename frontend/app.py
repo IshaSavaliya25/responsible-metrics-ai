@@ -65,7 +65,7 @@ with st.sidebar:
     backend_status = check_backend()
 
 
-    if backend_status:
+    if backend_status and not backend_status.get("error") and backend_status.get("status") == "healthy":
 
         st.success(
             "Backend Connected"

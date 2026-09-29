@@ -13,6 +13,8 @@ BASE_DIR = os.path.dirname(
 
 class Settings:
 
+    BASE_DIR = BASE_DIR
+
     PROJECT_NAME = "ResponsibleMetrics AI"
 
     PROJECT_VERSION = "1.0.0"

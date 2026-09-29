@@ -267,6 +267,8 @@ if "analysis_result" in st.session_state:
         compliance_score = 0.0
 
     novelty_level = gap_data.get("novelty_level", "Unknown")
+    nov_pct = gap_data.get("novelty_percentage")
+    novelty_display = f"{novelty_level} ({nov_pct:.1f}%)" if nov_pct is not None else str(novelty_level)
 
     col1, col2, col3 = st.columns(3)
 
@@ -278,7 +280,9 @@ if "analysis_result" in st.session_state:
         st.metric("Principle Compliance", f"{compliance_score:.2f}%")
 
     with col3:
-        st.metric("Novelty Level", novelty_level)
+        st.metric("Novelty Level", novelty_display)
+        if gap_data.get("novelty_category"):
+            st.caption(gap_data.get("novelty_category"))
 
     # --------------------------------
     # SCORE CHART
@@ -609,7 +613,7 @@ if "analysis_result" in st.session_state:
         if gap_data.get("error"):
             st.warning(str(gap_data.get("error")))
         else:
-            col1, col2, col3 = st.columns(3)
+            col1, col2, col3, col4 = st.columns(4)
             with col1:
                 st.metric("Literature Papers", gap_data.get("literature_count", 0))
             with col2:
@@ -619,7 +623,14 @@ if "analysis_result" in st.session_state:
                     sim_val = 0.0
                 st.metric("Average Similarity", f"{sim_val:.4f}")
             with col3:
-                st.metric("Novelty Level", gap_data.get("novelty_level", "N/A"))
+                nearest_s = float(gap_data.get("nearest_similarity", 0.0) or 0.0)
+                st.metric("Nearest Prior Art Match", f"{nearest_s * 100:.1f}%")
+            with col4:
+                nov_p = gap_data.get("novelty_percentage")
+                nov_l = gap_data.get("novelty_level", "N/A")
+                st.metric("Novelty Index", f"{nov_p:.1f}%" if nov_p is not None else nov_l)
+                if gap_data.get("novelty_category"):
+                    st.caption(gap_data.get("novelty_category"))
 
             st.markdown("### 🎯 Potential Gap Statement")
             st.info(gap_data.get("potential_gap", "No potential gap statement generated."))

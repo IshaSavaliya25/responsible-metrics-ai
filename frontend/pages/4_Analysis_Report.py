@@ -261,6 +261,10 @@ novelty_level = research_gap_summary.get(
     "Unknown"
 )
 
+novelty_pct = research_gap_summary.get(
+    "novelty_percentage"
+)
+
 
 average_similarity = research_gap_summary.get(
     "average_similarity",
@@ -332,7 +336,7 @@ with col3:
 
         "Novelty Level",
 
-        novelty_level
+        f"{novelty_level} ({novelty_pct:.1f}%)" if novelty_pct is not None else str(novelty_level)
 
     )
 
@@ -347,6 +351,62 @@ with col4:
 
     )
 
+
+st.divider()
+
+# =========================================================
+# SCORE CALCULATION METHODOLOGY EXPANDER
+# =========================================================
+with st.expander("📐 How are these 4 evaluation scores calculated? (Formulations & Methodology)"):
+    m_col1, m_col2 = st.columns(2)
+    with m_col1:
+        st.markdown("#### 1. Responsible Score (0 – 100%)")
+        st.latex(r"S_{\text{resp}} = \min\left(100, \sum_{d=1}^6 w_d \cdot D_d + B_{\text{biblio}}\right)")
+        st.markdown(
+            """
+            Multi-dimensional indicator rigor across 6 Leiden criteria:
+            - **Contextual Evaluation (20%)** & **Limitations Awareness (20%)**
+            - **Transparency (15%)**, **Metric Diversity (15%)**, **Qualitative Evidence (15%)**, **Discipline Awareness (15%)**
+            - **$B_{\\text{biblio}}$**: Up to +5% bonus for verifiable OpenAlex metadata (+2 citations, +1 pub year, +2 open access).
+            """
+        )
+
+        st.markdown("#### 2. Principle Compliance Score (0 – 100%)")
+        st.latex(r"S_{\text{comp}} = \max\left(0, \min\left(100, 50 + 7 \cdot |P| - \sum_{m \in M} \text{penalty}(m)\right)\right)")
+        st.markdown(
+            """
+            Audits alignment with Leiden & DORA principles from a baseline of 50%:
+            - **Reward**: $+7\\%$ for each confirmed positive practice ($|P|$).
+            - **High Penalty ($-15\\%$)**: JIF on individual, single-metric gatekeeping, unnormalized cross-discipline comparison.
+            - **Medium Penalty ($-10\\%$)**: Arbitrary h-index cutoff.
+            - **Low Penalty ($-5\\%$)**: False precision / unrounded decimals.
+            """
+        )
+
+    with m_col2:
+        st.markdown("#### 3. Literature Similarity (Cosine Similarity)")
+        st.latex(r"\text{Sim}(q, d_i) = \frac{\vec{v}_q \cdot \vec{v}_i}{\|\vec{v}_q\|_2 \|\vec{v}_i\|_2}")
+        st.markdown(
+            """
+            Dense semantic embedding vector $\\vec{v} \\in \\mathbb{R}^{384}$ generated via Sentence-BERT (`all-MiniLM-L6-v2`):
+            - **Literature Similarity** represents the average cosine similarity $\\bar{S} = \\frac{1}{N}\\sum_{i=1}^N \\text{Sim}(q, d_i)$ across the benchmark corpus ($N=20$).
+            - Higher similarity indicates thematic alignment with mainstream responsible metrics literature.
+            """
+        )
+
+        st.markdown("#### 4. Novelty Level & Novelty Index")
+        st.latex(r"\text{Overlap} = 0.60 \cdot s_{\text{top1}} + 0.40 \cdot s_{\text{top3}}")
+        st.latex(r"N_{\text{score}} = 0.70 \cdot (1.0 - \text{Overlap}) + 0.30 \cdot (1.0 - s_{\text{cluster}})")
+        st.markdown(
+            """
+            Quantifies divergence from existing scientific literature:
+            - **Overlap**: Weighted blend of closest prior art match ($s_{\\text{top1}}$) and top-3 neighborhood density ($s_{\\text{top3}}$).
+            - **Thresholds**:
+              - 🚀 **High ($\\ge 72\\%$)**: Frontier / pioneering research gap.
+              - ⚖️ **Medium ($42\\% - 72\\%$)**: Novel synthesis or balanced extension.
+              - 📚 **Low ($< 42\\%$)**: Incremental addition to dense prior literature.
+            """
+        )
 
 st.divider()
 
@@ -745,13 +805,16 @@ with tab4:
 with tab5:
     st.header("🧬 Research Gap Detection & Literature Landscape")
 
-    col_g1, col_g2, col_g3 = st.columns(3)
+    col_g1, col_g2, col_g3, col_g4 = st.columns(4)
     with col_g1:
-        st.metric("Novelty Level", novelty_level)
+        st.metric("Novelty Rating", novelty_level)
     with col_g2:
-        st.metric("Average Literature Similarity", f"{average_similarity:.4f}")
+        st.metric("Novelty Index", f"{novelty_pct:.1f}%" if novelty_pct is not None else "N/A")
     with col_g3:
-        st.metric("Benchmark Papers Compared", research_gap_analysis.get("literature_count", 35))
+        nearest_score = float(research_gap_analysis.get("nearest_similarity", 0.0) or 0.0)
+        st.metric("Nearest Literature Match", f"{nearest_score * 100:.1f}%")
+    with col_g4:
+        st.metric("Benchmark Papers Compared", research_gap_analysis.get("literature_count", 20))
 
     gap_stmt = research_gap_analysis.get("potential_gap")
     if gap_stmt:

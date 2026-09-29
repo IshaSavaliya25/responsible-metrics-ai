@@ -267,6 +267,103 @@ with lvl4:
 st.divider()
 
 # -------------------------------------------------
+# MATHEMATICAL FORMULATIONS & SCORE DERIVATIONS
+# -------------------------------------------------
+st.header("📐 How Metrics Are Calculated (Mathematical Formulations)")
+st.write(
+    "ResponsibleMetrics AI combines rule-based scientometric auditing, OpenAlex bibliometric verification, "
+    "and dense neural embeddings (`all-MiniLM-L6-v2`) to derive four primary evaluation indicators."
+)
+
+math_tab1, math_tab2, math_tab3, math_tab4 = st.tabs([
+    "🏆 Responsible Score",
+    "⚖️ Principle Compliance",
+    "🔍 Literature Similarity",
+    "💡 Novelty Level & Index"
+])
+
+with math_tab1:
+    st.subheader("1. Responsible Score ($S_{\\text{resp}} \\in [0, 100]$)")
+    st.latex(r"S_{\text{resp}} = \min\left(100, \sum_{d=1}^6 w_d \cdot D_d + B_{\text{biblio}}\right)")
+    st.markdown(
+        """
+        The **Responsible Score** measures how comprehensively a research manuscript adheres to responsible scientometric reporting across six core Leiden dimensions:
+        """
+    )
+    col_d1, col_d2 = st.columns(2)
+    with col_d1:
+        st.markdown(
+            """
+            * **Contextual Evaluation ($w_1 = 0.20$):** Qualitative explanations contextualizing quantitative numbers.
+            * **Limitations Awareness ($w_2 = 0.20$):** Explicit caveats on metric bias, sample bounds, or margins of error.
+            * **Methodological Transparency ($w_3 = 0.15$):** Reproducible calculation details, code/data access.
+            """
+        )
+    with col_d2:
+        st.markdown(
+            """
+            * **Metric Diversity ($w_4 = 0.15$):** Using an indicator portfolio rather than a single metric.
+            * **Qualitative Evidence ($w_5 = 0.15$):** Incorporating expert peer review or narrative evidence.
+            * **Discipline Awareness ($w_6 = 0.15$):** Field-normalized comparisons (e.g., FWCI or subfield percentiles).
+            """
+        )
+    st.markdown(
+        """
+        - **Dimension Score:** $D_d = \\min\\left(100, \\frac{\\text{matches}_d}{\\text{max\\_matches}_d} \\times 100\\right)$ based on matched NLP rhetorical indicators.
+        - **Metadata Bonus ($B_{\\text{biblio}} \\le 5$):** OpenAlex verified metadata bonus (+2 citations, +1 publication year, +2 open access).
+        """
+    )
+
+with math_tab2:
+    st.subheader("2. Principle Compliance Score ($S_{\\text{comp}} \\in [0, 100]$)")
+    st.latex(r"S_{\text{comp}} = \max\left(0, \min\left(100, 50 + 7 \cdot |P| - \sum_{m \in M} \text{penalty}(m)\right)\right)")
+    st.markdown(
+        """
+        The **Principle Compliance Score** measures strict adherence to the **Leiden Manifesto** and **DORA** declarations, starting from an unbiased baseline of **50%**:
+        - **Positive Compliance Reward ($+7\\%$ per detected practice):**
+          - Supporting qualitative judgment (Leiden P1).
+          - Field-normalized citation evaluation (Leiden P6).
+          - Indicator portfolio transparency (Leiden P9).
+          - Article-level evaluation avoiding journal-level proxies (DORA).
+        - **Deductive Penalties by Misuse Severity:**
+          - **High Severity ($-15\\%$):** Using Journal Impact Factor (JIF) to judge individual papers/researchers, single-metric gatekeeping, unnormalized cross-discipline comparisons.
+          - **Medium Severity ($-10\\%$):** Arbitrary h-index cutoffs or metric gaming without context.
+          - **Low Severity ($-5\\%$):** False precision (e.g. reporting impact factors to 3 decimal places).
+        """
+    )
+
+with math_tab3:
+    st.subheader("3. Literature Similarity (Cosine Similarity $\\bar{S}$)")
+    st.latex(r"\text{Sim}(q, d_i) = \frac{\vec{v}_q \cdot \vec{v}_i}{\|\vec{v}_q\|_2 \|\vec{v}_i\|_2}")
+    st.latex(r"\bar{S} = \frac{1}{N}\sum_{i=1}^N \text{Sim}(q, d_i)")
+    st.markdown(
+        """
+        - The uploaded paper $q$ and benchmark corpus documents $d_i$ are mapped into a dense 384-dimensional semantic embedding space using **Sentence-BERT** (`all-MiniLM-L6-v2`).
+        - **Nearest Prior Art Match:** $\\text{Sim}_{\\text{nearest}} = \\max_i \\text{Sim}(q, d_i)$ identifies the most conceptually similar published work.
+        - **Literature Similarity (Average):** $\\bar{S}$ reflects the overall contextual alignment across the benchmark corpus ($N=20$). High values indicate core mainstream bibliometric topics; lower values indicate emerging or interdisciplinary domains.
+        """
+    )
+
+with math_tab4:
+    st.subheader("4. Novelty Level & Novelty Index ($N_{\\text{index}} \\in [0\\%, 100\\%]$)")
+    st.latex(r"\text{Overlap} = 0.60 \cdot s_{\text{top1}} + 0.40 \cdot s_{\text{top3}}")
+    st.latex(r"N_{\text{score}} = 0.70 \cdot (1.0 - \text{Overlap}) + 0.30 \cdot (1.0 - s_{\text{cluster}})")
+    st.latex(r"N_{\text{index}} = N_{\text{score}} \times 100\%")
+    st.markdown(
+        """
+        Novelty quantifies how much the paper departs from existing literature to explore an unfilled research gap:
+        - **Overlap Metric:** Blends nearest prior art similarity ($s_{\\text{top1}}$) with local neighborhood density ($s_{\\text{top3}}$) to prevent single-outlier distortion.
+        - **Cluster Distance ($1.0 - s_{\\text{cluster}}$):** Measures semantic distance from the closest K-Means literature cluster centroid.
+        - **Calibrated Novelty Thresholds:**
+          - 🚀 **High Novelty ($N_{\\text{index}} \\ge 72\\%$):** *Frontier / Pioneering Work.* Low overlap with existing corpus, addressing novel questions or unstudied domains.
+          - ⚖️ **Medium Novelty ($42\\% \\le N_{\\text{index}} < 72\\%$):** *Novel Synthesis / Extension.* Extends established methodologies to new contexts or combines multiple subfields.
+          - 📚 **Low Novelty ($N_{\\text{index}} < 42\\%$):** *Incremental Addition.* High overlap ($s > 0.60$) with existing dense literature clusters.
+        """
+    )
+
+st.divider()
+
+# -------------------------------------------------
 # WHO IS THIS BUILT FOR?
 # -------------------------------------------------
 st.header("👥 Who Can Use This System?")

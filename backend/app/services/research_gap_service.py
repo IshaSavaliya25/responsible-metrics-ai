@@ -334,7 +334,8 @@ class ResearchGapService:
         self,
         query_paper,
         average_similarity,
-        underexplored_keywords
+        underexplored_keywords,
+        novelty_level: str = None
     ):
 
         title = query_paper.get(
@@ -343,28 +344,25 @@ class ResearchGapService:
         )
 
 
-        if average_similarity < 0.20:
+        if novelty_level == "High" or (novelty_level is None and average_similarity < 0.20):
 
             gap_level = (
-                "The proposed research demonstrates "
-                "a relatively low overlap with the existing "
-                "literature dataset."
+                "The proposed research explores frontier territory with "
+                "relatively low direct overlap against existing literature."
             )
 
-        elif average_similarity < 0.50:
+        elif novelty_level == "Medium" or (novelty_level is None and average_similarity < 0.50):
 
             gap_level = (
-                "The proposed research is related to existing "
-                "literature but introduces potentially distinct "
-                "perspectives or combinations of concepts."
+                "The proposed research builds directly upon established literature "
+                "while introducing distinct conceptual perspectives and novel combinations."
             )
 
         else:
 
             gap_level = (
-                "The proposed research has substantial overlap "
-                "with existing literature and may require stronger "
-                "differentiation."
+                "The proposed research has substantial overlap with prior art "
+                "and functions as a direct, incremental continuation."
             )
 
 
@@ -410,22 +408,76 @@ class ResearchGapService:
 
 
     # ==========================================
-    # NOVELTY CLASSIFICATION
+    # NOVELTY CALCULATION & CLASSIFICATION
     # ==========================================
+
+    def calculate_novelty(
+        self,
+        similar_papers: list,
+        cluster_novelty_score: float = None
+    ) -> dict:
+        """
+        Calculates literature novelty based on:
+        1. Nearest prior art similarity (top-1)
+        2. Local neighborhood overlap (top-3 average)
+        3. Thematic cluster distance in dense embedding space
+        """
+        if not similar_papers:
+            return {
+                "novelty_score": 0.85,
+                "novelty_percentage": 85.0,
+                "novelty_level": "High",
+                "nearest_similarity": 0.0,
+                "top3_similarity": 0.0,
+                "novelty_category": "High (Pioneering / Frontier)"
+            }
+
+        top_sims = [float(p.get("similarity", 0.0) or 0.0) for p in similar_papers[:3]]
+        nearest_sim = top_sims[0] if top_sims else 0.0
+        top3_sim = sum(top_sims) / len(top_sims) if top_sims else 0.0
+
+        # Prior art overlap: 60% nearest benchmark paper, 40% top-3 neighborhood
+        prior_art_overlap = 0.60 * nearest_sim + 0.40 * top3_sim
+
+        # Factor in cluster novelty if available
+        if cluster_novelty_score is not None:
+            raw_novelty = 0.70 * (1.0 - prior_art_overlap) + 0.30 * cluster_novelty_score
+        else:
+            raw_novelty = 1.0 - prior_art_overlap
+
+        novelty_score = round(max(0.08, min(0.96, raw_novelty)), 4)
+        novelty_percentage = round(novelty_score * 100.0, 1)
+
+        # Classification based on novelty score
+        if novelty_score >= 0.72:
+            novelty_level = "High"
+            novelty_category = "High (Pioneering / Frontier)"
+        elif novelty_score >= 0.42:
+            novelty_level = "Medium"
+            novelty_category = "Medium (Novel Synthesis / Extension)"
+        else:
+            novelty_level = "Low"
+            novelty_category = "Low (Incremental Follow-up)"
+
+        return {
+            "novelty_score": novelty_score,
+            "novelty_percentage": novelty_percentage,
+            "novelty_level": novelty_level,
+            "nearest_similarity": round(nearest_sim, 4),
+            "top3_similarity": round(top3_sim, 4),
+            "novelty_category": novelty_category
+        }
 
     def classify_novelty(
         self,
         average_similarity
     ):
-
-        if average_similarity < 0.20:
-
+        if isinstance(average_similarity, str):
+            return average_similarity
+        if average_similarity < 0.25:
             return "High"
-
-        elif average_similarity < 0.50:
-
+        elif average_similarity < 0.55:
             return "Medium"
-
         return "Low"
 
 
@@ -570,31 +622,10 @@ class ResearchGapService:
         )
 
         # --------------------------------------
-        # NOVELTY
-        # --------------------------------------
-
-        novelty_level = (
-            self.classify_novelty(
-                average_similarity
-            )
-        )
-
-        # --------------------------------------
-        # GAP STATEMENT
-        # --------------------------------------
-
-        potential_gap = (
-            self.generate_gap_statement(
-                query_paper,
-                average_similarity,
-                underexplored_keywords
-            )
-        )
-
-        # --------------------------------------
         # THEMATIC CLUSTERING (K-Means + PCA)
         # --------------------------------------
         clustering_result = {}
+        cluster_nov = None
         try:
             from app.ml.clustering import ResearchClusteringService
             clustering_service = ResearchClusteringService()
@@ -602,18 +633,45 @@ class ResearchGapService:
                 target_paper=query_paper,
                 literature_papers=self.literature
             )
+            target_pos = clustering_result.get("target_position", {})
+            cluster_nov = target_pos.get("novelty_score")
         except Exception as e:
             print("Clustering error:", e)
             clustering_result = {}
 
         # --------------------------------------
+        # NOVELTY METRICS
+        # --------------------------------------
+        novelty_data = self.calculate_novelty(
+            similar_papers=similar_papers,
+            cluster_novelty_score=cluster_nov
+        )
+        novelty_level = novelty_data["novelty_level"]
+        novelty_score = novelty_data["novelty_score"]
+        novelty_percentage = novelty_data["novelty_percentage"]
+
+        # --------------------------------------
+        # GAP STATEMENT
+        # --------------------------------------
+        potential_gap = self.generate_gap_statement(
+            query_paper,
+            average_similarity,
+            underexplored_keywords,
+            novelty_level=novelty_level
+        )
+
+        # --------------------------------------
         # FINAL RESULT
         # --------------------------------------
-
         return {
             "literature_count": len(self.literature),
             "average_similarity": average_similarity,
             "novelty_level": novelty_level,
+            "novelty_score": novelty_score,
+            "novelty_percentage": novelty_percentage,
+            "novelty_category": novelty_data["novelty_category"],
+            "nearest_similarity": novelty_data["nearest_similarity"],
+            "top3_similarity": novelty_data["top3_similarity"],
             "similar_papers": similar_papers,
             "underexplored_keywords": underexplored_keywords,
             "potential_gap": potential_gap,
